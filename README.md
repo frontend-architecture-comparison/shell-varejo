@@ -1,177 +1,142 @@
 # Shell Varejo
 
 <p align="center">
-  Aplicacao base desenvolvida em Angular para servir como shell do projeto Varejo.
+  Shell Angular para orquestracao de microfrontends do dominio Varejo via Module Federation.
 </p>
 
 <p align="center">
   <img alt="Angular" src="https://img.shields.io/badge/Angular-15.2.11-DD0031?logo=angular&logoColor=white">
   <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-4.9.4-3178C6?logo=typescript&logoColor=white">
-  <img alt="Karma" src="https://img.shields.io/badge/Testes-Karma%20%2B%20Jasmine-3A6EA5">
+  <img alt="Module Federation" src="https://img.shields.io/badge/Module%20Federation-@angular--architects-FF6F00">
 </p>
-
-# Shell Varejo
-
-Repositorio contendo a base inicial de uma aplicacao Angular criada com arquitetura tradicional baseada em modulos.
 
 ## Objetivo
 
-Este projeto serve como ponto de partida para uma aplicacao shell do dominio Varejo, centralizando a estrutura inicial de bootstrap, roteamento e componente raiz.
+Este repositorio representa o shell da aplicacao Varejo, responsavel por:
 
-A aplicacao atualmente segue o scaffold padrao do Angular CLI e esta preparada para evoluir com novas telas, rotas e servicos conforme o dominio for sendo implementado.
+- centralizar o roteamento principal
+- carregar microfrontends remotos
+- servir como ponto unico de entrada da aplicacao
 
-## Arquitetura
+## Arquitetura Atual
 
-O projeto segue a abordagem classica do Angular 15 com `AppModule` como modulo principal e `AppRoutingModule` para configuracao de rotas.
+O projeto usa Angular 15 com estrutura baseada em modulo (`AppModule`) e roteamento em `AppRoutingModule`.
 
-**Caracteristicas principais:**
+O carregamento de features de negocio e feito com `loadRemoteModule` do pacote `@angular-architects/module-federation`.
 
-- Aplicacao unica
-- Bootstrap via modulo Angular
-- Organizacao simples para evolucao incremental
-- Estrutura inicial pronta para navegacao e componentes adicionais
-- Base adequada para expansao de features futuras
+### Microfrontends conectados
 
-### Organizacao Atual
+- `home` -> remoto em `http://localhost:4201/remoteEntry.js`
+- `carrinho` -> remoto em `http://localhost:4202/remoteEntry.js`
 
-#### **App** (`src/app/`)
-Camada principal da aplicacao:
-- `AppComponent` - Componente raiz da aplicacao
-- `AppModule` - Modulo principal
-- `AppRoutingModule` - Configuracao inicial de rotas
+## Rotas
 
-#### **Assets** (`src/assets/`)
-Diretorio destinado a imagens, icones e arquivos estaticos.
+Rotas atualmente configuradas no shell:
 
-## Estado Atual
-
-No momento, o projeto esta em estado inicial, com a interface padrao gerada pelo Angular CLI.
-
-Isso significa que:
-- Ainda nao ha rotas de negocio implementadas
-- Ainda nao ha features especificas do dominio Varejo
-- A estrutura esta pronta para receber as proximas telas e fluxos
-
-## Tecnologias Utilizadas
-
-| Tecnologia | Versao | Proposito |
-|-----------|--------|----------|
-| Angular | 15.2.0 | Framework frontend |
-| Angular CLI / DevKit | 15.2.11 | Build e tooling |
-| TypeScript | ~4.9.4 | Linguagem de programacao |
-| RxJS | ~7.8 | Programacao reativa |
-| Zone.js | ~0.12.0 | Suporte ao change detection |
-| Karma + Jasmine | 6.4 / 4.5 | Testes unitarios |
-| npm | 9+ | Gerenciador de pacotes |
-
-## Estrutura do Projeto
-
-```text
-shell-varejo/
-├── src/
-│   ├── app/
-│   │   ├── app.component.ts
-│   │   ├── app.component.html
-│   │   ├── app.component.scss
-│   │   ├── app.module.ts
-│   │   └── app-routing.module.ts
-│   ├── assets/
-│   ├── main.ts
-│   ├── styles.scss
-│   └── index.html
-├── angular.json
-├── package.json
-├── tsconfig.json
-├── tsconfig.app.json
-├── tsconfig.spec.json
-└── README.md
+```typescript
+const routes: Routes = [
+  {
+    path: '',
+    redirectTo: 'home',
+    pathMatch: 'full',
+  },
+  {
+    path: 'home',
+    loadChildren: () =>
+      loadRemoteModule({
+        type: 'module',
+        remoteEntry: 'http://localhost:4201/remoteEntry.js',
+        exposedModule: './Module',
+      }).then((m) => m.AppModule),
+  },
+  {
+    path: 'carrinho',
+    loadChildren: () =>
+      loadRemoteModule({
+        type: 'module',
+        remoteEntry: 'http://localhost:4202/remoteEntry.js',
+        exposedModule: './Module',
+      }).then((m) => m.AppModule),
+  },
+];
 ```
 
-## Como Executar o Projeto
+## Tecnologias
+
+| Tecnologia | Versao |
+|-----------|--------|
+| Angular | 15.2.x |
+| Angular CLI / DevKit | 15.2.11 |
+| TypeScript | ~4.9.4 |
+| RxJS | ~7.8 |
+| Zone.js | ~0.12.0 |
+| Module Federation | @angular-architects/module-federation ^21.2.2 |
+| Karma + Jasmine | 6.4 / 4.5 |
+
+## Scripts
+
+| Script | Descricao |
+|--------|-----------|
+| `npm start` | Sobe apenas o shell (`ng serve`) |
+| `npm run build` | Gera build de producao do shell |
+| `npm run watch` | Build em modo observacao |
+| `npm test` | Executa testes unitarios |
+| `npm run run:all` | Sobe ambiente de desenvolvimento com Module Federation (`mf-dev-server`) |
+
+## Como executar
 
 ### Pre-requisitos
 
-- Node.js 16+ ou superior compativel com Angular 15
+- Node.js compativel com Angular 15 (recomendado usar versao LTS)
 - npm
 
-### Instalacao de Dependencias
+### Instalar dependencias
 
 ```bash
 npm install
 ```
 
-### Servidor de Desenvolvimento
+### Rodar shell
 
 ```bash
 npm start
 ```
 
-Acesse: `http://localhost:4200`
+Acesse `http://localhost:4200`.
 
-### Build de Producao
-
-```bash
-npm run build
-```
-
-Gera os artefatos de producao no diretorio `dist/`.
-
-### Testes
+### Rodar com MF local
 
 ```bash
-npm test
+npm run run:all
 ```
 
-Executa os testes unitarios via Karma/Jasmine.
+Use este modo para integrar shell + remotos durante desenvolvimento.
 
-## Scripts Disponiveis
+## Estrutura resumida
 
-| Script | Descricao |
-|--------|-----------|
-| `npm start` | Sobe o servidor de desenvolvimento |
-| `npm run build` | Gera build de producao |
-| `npm run watch` | Gera build em modo observacao |
-| `npm test` | Executa testes unitarios |
-
-## Fluxo de Roteamento
-
-A aplicacao atualmente usa uma configuracao inicial de rotas vazia:
-
-```typescript
-const routes: Routes = [];
+```text
+shell-varejo/
+├── src/
+│   ├── app/
+│   │   ├── app.component.*
+│   │   ├── app.module.ts
+│   │   ├── app-routing.module.ts
+│   │   └── home/
+│   ├── assets/
+│   ├── main.ts
+│   └── styles.scss
+├── webpack.config.js
+├── webpack.prod.config.js
+├── angular.json
+├── package.json
+└── README.md
 ```
 
-Isso permite evoluir o shell gradualmente, adicionando rotas conforme as features do dominio forem sendo criadas.
+## Observacoes
 
-## Padroes Utilizados
-
-- Estrutura classica baseada em modulos
-- Separacao entre modulo principal e roteamento
-- Componente raiz para bootstrap da aplicacao
-- Base preparada para expansao por features
-
-## Contexto do Projeto
-
-Este repositorio representa a camada shell/base da aplicacao Varejo.
-
-Ele pode ser usado como ponto de partida para:
-- novas telas institucionais
-- navegacao principal da aplicacao
-- composicao de modulos de dominio
-- evolucao futura para uma arquitetura mais segmentada
-
-## Versao
-
-- **Angular**: 15.2.0
-- **Angular CLI**: 15.2.11
-- **TypeScript**: 4.9.4
-- **Node**: 16+
-- **npm**: 9+
-
-## Contribuicao
-
-Este e um projeto de base para evolucao do shell Varejo. Ajustes de estrutura devem priorizar simplicidade e consistencia com o padrao Angular atual do projeto.
+- Este projeto atua como host/shell; as telas de negocio sao servidas pelos remotos.
+- Caso um remoto nao esteja no ar, a navegacao para a rota correspondente falhara ate o remoto ficar disponivel.
 
 ---
 
-**Ultima atualizacao:** Abril de 2026
+Ultima atualizacao: Abril de 2026

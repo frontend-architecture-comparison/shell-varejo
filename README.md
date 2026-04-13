@@ -47,7 +47,7 @@ const routes: Routes = [
         type: 'module',
         remoteEntry: 'http://localhost:4201/remoteEntry.js',
         exposedModule: './Module',
-      }).then((m) => m.AppModule),
+      }).then((m) => m.RemoteEntryModule),
   },
   {
     path: 'carrinho',
@@ -56,7 +56,7 @@ const routes: Routes = [
         type: 'module',
         remoteEntry: 'http://localhost:4202/remoteEntry.js',
         exposedModule: './Module',
-      }).then((m) => m.AppModule),
+      }).then((m) => m.RemoteEntryModule ?? m.AppModule),
   },
 ];
 ```
@@ -78,6 +78,7 @@ const routes: Routes = [
 | Script | Descricao |
 |--------|-----------|
 | `npm start` | Sobe apenas o shell (`ng serve`) |
+| `npm run start:mf` | Sobe shell na 4200 + remoto cartoes na 4201 e tenta subir carrinho na 4202 se existir |
 | `npm run build` | Gera build de producao do shell |
 | `npm run watch` | Build em modo observacao |
 | `npm test` | Executa testes unitarios |
@@ -105,6 +106,12 @@ npm start
 Acesse `http://localhost:4200`.
 
 ### Rodar com MF local
+
+```bash
+npm run start:mf
+```
+
+Ou:
 
 ```bash
 npm run run:all

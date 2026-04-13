@@ -16,7 +16,7 @@ const routes: Routes = [
         type: 'module',
         remoteEntry: 'http://localhost:4201/remoteEntry.js',
         exposedModule: './Module',
-      }).then((m) => m.AppModule),
+      }).then((m) => m.RemoteEntryModule),
   },
   {
     path: 'carrinho',
@@ -25,7 +25,7 @@ const routes: Routes = [
         type: 'module',
         remoteEntry: 'http://localhost:4202/remoteEntry.js',
         exposedModule: './Module',
-      }).then((m) => m.AppModule),
+      }).then((m) => m.RemoteEntryModule ?? m.AppModule),
   },
 ];
 

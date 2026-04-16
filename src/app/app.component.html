@@ -1,1 +1,13 @@
-<router-outlet></router-outlet>
+<main>
+  <app-header
+    [title]="title"
+    [showBack]="isCarrinhoRoute"
+    [cartQuantidade]="cartQuantidade"
+    (homeClicked)="goToHome()"
+    (cartClicked)="goToCart()"
+  ></app-header>
+  
+  <section>
+    <router-outlet></router-outlet>
+  </section>
+</main>

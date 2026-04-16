@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "start:mf": "sh -c 'npm --prefix ../mfe-cartoes run start -- --port 4201 & if [ -d ../mfe-carrinho ]; then npm --prefix ../mfe-carrinho run start -- --port 4202 & elif [ -d ../mfe-carrinhos ]; then npm --prefix ../mfe-carrinhos run start -- --port 4202 & else echo \"[warn] ../mfe-carrinho ou ../mfe-carrinhos nao encontrado; porta 4202 desativada\"; fi; npm run start -- --port 4200'",
+    "start:mf": "sh -c 'npm --prefix ../mfe-cartoes run mock:server & npm --prefix ../mfe-cartoes run start -- --port 4201 & if [ -d ../mfe-carrinho ]; then npm --prefix ../mfe-carrinho run start -- --port 4202 & elif [ -d ../mfe-carrinhos ]; then npm --prefix ../mfe-carrinhos run start -- --port 4202 & else echo \"[warn] ../mfe-carrinho ou ../mfe-carrinhos nao encontrado; porta 4202 desativada\"; fi; npm run start -- --port 4200'",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",

@@ -5,18 +5,23 @@ import { loadRemoteModule } from '@angular-architects/module-federation';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'cartoes',
+    pathMatch: 'full',
+  },
+  {
+    path: 'home',
+    redirectTo: 'cartoes',
     pathMatch: 'full',
   },
   // lista de cartões
   {
-    path: 'home',
+    path: 'cartoes',
     loadChildren: () =>
       loadRemoteModule({
         type: 'module',
         remoteEntry: 'http://localhost:4201/remoteEntry.js',
         exposedModule: './Module',
-      }).then((m) => m.AppModule),
+      }).then((m) => m.RemoteEntryModule ?? m.AppModule),
   },
   {
     path: 'carrinho',

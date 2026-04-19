@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { loadRemoteModule } from '@angular-architects/module-federation';
 
+const URL_MFE_CARTOES = 'http://localhost:4201';
+const URL_MFE_CARRINHO = 'http://localhost:4202';
+
 const routes: Routes = [
   {
     path: '',
@@ -13,13 +16,12 @@ const routes: Routes = [
     redirectTo: 'cartoes',
     pathMatch: 'full',
   },
-  // lista de cartões
   {
     path: 'cartoes',
     loadChildren: () =>
       loadRemoteModule({
         type: 'module',
-        remoteEntry: 'http://localhost:4201/remoteEntry.js',
+        remoteEntry: `${URL_MFE_CARTOES}/remoteEntry.js`,
         exposedModule: './Module',
       }).then((m) => m.RemoteEntryModule ?? m.AppModule),
   },
@@ -28,7 +30,7 @@ const routes: Routes = [
     loadChildren: () =>
       loadRemoteModule({
         type: 'module',
-        remoteEntry: 'http://localhost:4202/remoteEntry.js',
+        remoteEntry: `${URL_MFE_CARRINHO}/remoteEntry.js`,
         exposedModule: './Module',
       }).then((m) => m.RemoteEntryModule ?? m.AppModule),
   },

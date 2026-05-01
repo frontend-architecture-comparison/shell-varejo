@@ -44,6 +44,7 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.atualizarQuantidadeCarrinho();
 
+    // TODO: extrair para serviço de estado global
     this.routeSubscription = this.router.events
       .pipe(
         filter((event): event is NavigationEnd => event instanceof NavigationEnd),
@@ -53,6 +54,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.currentUrl = url;
       });
 
+    // TODO: extrair para serviço de estado global
     if (typeof window !== 'undefined') {
       this.onCarrinhoAtualizado = () => this.atualizarQuantidadeCarrinho();
       this.onStorage = (event: StorageEvent) => {
@@ -69,6 +71,7 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.routeSubscription?.unsubscribe();
 
+    // TODO: extrair para serviço de estado global
     if (typeof window !== 'undefined') {
       if (this.onCarrinhoAtualizado) {
         window.removeEventListener(CARRINHO_ATUALIZADO_EVENT, this.onCarrinhoAtualizado);
@@ -88,6 +91,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.router.navigate(['/home']);
   }
 
+  // TODO: extrair para serviço de estado global
   private atualizarQuantidadeCarrinho(): void {
     if (typeof window === 'undefined') {
       this.cartQuantidade = 0;

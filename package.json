@@ -6,6 +6,8 @@
     "start": "ng serve",
     "start:mf": "sh -c 'npm --prefix ../mfe-cartoes run mock:server & npm --prefix ../mfe-cartoes run start -- --port 4201 & if [ -d ../mfe-carrinho ]; then npm --prefix ../mfe-carrinho run mock:server & npm --prefix ../mfe-carrinho run start -- --port 4202 & elif [ -d ../mfe-carrinhos ]; then npm --prefix ../mfe-carrinhos run start -- --port 4202 & else echo \"[warn] ../mfe-carrinho ou ../mfe-carrinhos nao encontrado; porta 4202 desativada\"; fi; npm run start -- --port 4200'",
     "build": "ng build",
+    "build:prod": "ng build --configuration production",
+    "serve:prod": "npx serve -s dist/shell-varejo -l 4200",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "run:all": "node node_modules/@angular-architects/module-federation/src/server/mf-dev-server.js"
